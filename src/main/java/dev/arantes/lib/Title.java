@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Constructor;
 
 public class Title extends NMSReflections {
+    private static Class<?> packetClass = getNMSClass("PacketPlayOutTitle");
+    private static Class<?> chatClass = getNMSClass("IChatBaseComponent");
+
     private Object titlePacket;
     private Object subtitlePacket;
 
@@ -26,9 +29,6 @@ public class Title extends NMSReflections {
     }
 
     public void setTitle(String title, String subtitle, int fadeInTime, int showTime, int fadeOutTime){
-        Class<?> packetClass = getNMSClass("PacketPlayOutTitle");
-        Class<?> chatClass = getNMSClass("IChatBaseComponent");
-
         try {
             if (title != null) {
                 Object titleChat = chatClass.getDeclaredClasses()[0].getMethod("a", String.class)

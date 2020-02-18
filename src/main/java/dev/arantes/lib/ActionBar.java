@@ -8,22 +8,29 @@ import java.lang.reflect.Method;
 
 
 public class ActionBar extends NMSReflections {
+    private static Class<?> packetPlayOutChat = getNMSClass("PacketPlayOutChat");
+    private static Constructor<?> constructor;
+
     private Object packet;
 
     public ActionBar(String message) {
         this.setMessage(message);
+
+        try {
+            constructor = packetPlayOutChat.getConstructor(
+                    getNMSClass("IChatBaseComponent"), byte.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     public void show(Player player) {
         sendPacket(player, this.packet);
     }
 
+    // todo improve performace with static classes and constructors
     public void setMessage(String message){
         try {
-            Class<?> packetPlayOutChat = getNMSClass("PacketPlayOutChat");
-            Constructor<?> constructor = packetPlayOutChat.getConstructor(
-                    getNMSClass("IChatBaseComponent"), byte.class);
-
             Class<?> iChatBaseComponent = getNMSClass("IChatBaseComponent");
             Class<?> chatSerializer = iChatBaseComponent.getClasses()[0];
             Method a = chatSerializer.getMethod("a", String.class);
