@@ -15,7 +15,7 @@ public class NMSReflections {
         }
     }
 
-    protected Class<?> getNMSClass(String name) {
+    protected static Class<?> getNMSClass(String name) {
         String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
         try {
             return Class.forName("net.minecraft.server." + version + "." + name);
