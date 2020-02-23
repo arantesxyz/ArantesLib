@@ -1,21 +1,17 @@
-package dev.arantes.lib.database;
-
-import org.bukkit.plugin.java.JavaPlugin;
+package dev.arantes.lib.database.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseManager {
-    private final JavaPlugin plugin;
     private Connection connection;
 
-    public DatabaseManager(final JavaPlugin plugin) {
-        this.plugin = plugin;
+    public DatabaseManager() {
     }
 
-    // (uuid TEXT, rank TEXT)
     public void createTable(String name, String format) throws SQLException {
+    // (uuid TEXT, rank TEXT)
             PreparedStatement stm = connection.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS " + name + " (" + format + ")"
             );

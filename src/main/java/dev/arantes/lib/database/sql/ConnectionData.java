@@ -1,4 +1,4 @@
-package dev.arantes.lib.database;
+package dev.arantes.lib.database.sql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
