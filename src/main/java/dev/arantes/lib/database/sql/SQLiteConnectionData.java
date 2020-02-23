@@ -6,11 +6,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-class SQLiteConnectionData implements ConnectionData {
+public class SQLiteConnectionData implements ConnectionData {
     private final JavaPlugin plugin;
     private final String filename;
 
-    SQLiteConnectionData(final JavaPlugin plugin, final String filename) {
+    public SQLiteConnectionData(final JavaPlugin plugin, final String filename) {
         this.plugin = plugin;
         this.filename = filename;
     }
