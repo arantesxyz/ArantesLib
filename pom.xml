@@ -6,7 +6,7 @@
 
     <groupId>dev.arantes</groupId>
     <artifactId>ArantesLib</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <description>Simple and powerful lib to help the development of Spigot Plugins.</description>
     <url>https://github.com/arantesxyz/ArantesLib</url>
 
@@ -41,6 +41,14 @@
         </developer>
     </developers>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub ArantesXYZ Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/arantesxyz/ArantesLib</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
         <defaultGoal>clean install</defaultGoal>
@@ -68,22 +76,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <shadedClassifierName>shaded</shadedClassifierName>
                 </configuration>
             </plugin>
         </plugins>

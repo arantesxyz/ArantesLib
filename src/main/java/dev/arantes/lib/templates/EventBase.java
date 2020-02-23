@@ -1,4 +1,4 @@
-package dev.arantes.lib.objects;
+package dev.arantes.lib.templates;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
