@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class SelfRegisteredCommand extends BukkitCommand {
     private static Field bukkitCommandMap;
 
-    protected SelfRegisteredCommand(
+    public SelfRegisteredCommand(
             String name,
             String permission,
             String usageMessage,
