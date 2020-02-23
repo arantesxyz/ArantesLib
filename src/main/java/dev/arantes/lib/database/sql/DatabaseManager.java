@@ -29,7 +29,7 @@ public class DatabaseManager {
         }
     }
 
-    private void connect(ConnectionData data) throws SQLException, ClassNotFoundException {
+    public void connect(ConnectionData data) throws SQLException, ClassNotFoundException {
             this.connection = data.connect();
     }
 }
