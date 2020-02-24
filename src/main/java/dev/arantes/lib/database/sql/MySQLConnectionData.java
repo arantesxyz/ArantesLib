@@ -21,11 +21,11 @@ public class MySQLConnectionData implements ConnectionData {
         this.db = config.getString("database");
     }
 
-    boolean isEnabled() {
+    public boolean isEnabled() {
         return isEnabled;
     }
 
-    private String getURL() {
+    public String getURL() {
         return String.format("jdbc:mysql://%s/%s", host, db);
     }
 
