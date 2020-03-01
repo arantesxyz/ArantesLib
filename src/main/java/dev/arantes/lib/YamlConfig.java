@@ -62,6 +62,14 @@ public class YamlConfig {
         return fileConfiguration;
     }
 
+    public void save() {
+        try {
+            fileConfiguration.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void reload() {
         fileConfiguration = YamlConfiguration.loadConfiguration(file);
         logger.info(filename + " was reloaded.");
