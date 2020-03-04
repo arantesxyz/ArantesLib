@@ -10,18 +10,19 @@ import java.lang.reflect.Method;
 public class ActionBar extends NMSReflections {
     private static Class<?> packetPlayOutChat = getNMSClass("PacketPlayOutChat");
     private static Constructor<?> constructor;
-
-    private Object packet;
-
-    public ActionBar(String message) {
-        this.setMessage(message);
-
+    static {
         try {
             constructor = packetPlayOutChat.getConstructor(
                     getNMSClass("IChatBaseComponent"), byte.class);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+    }
+
+    private Object packet;
+
+    public ActionBar(String message) {
+        this.setMessage(message);
     }
 
     public void show(Player player) {
