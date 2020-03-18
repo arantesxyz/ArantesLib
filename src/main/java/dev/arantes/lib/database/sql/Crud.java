@@ -1,9 +1,6 @@
 package dev.arantes.lib.database.sql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Crud {
     private Connection connection;
@@ -21,19 +18,37 @@ public class Crud {
         stm.close();
     }
 
-    public ResultSet executeQuery(String sql) throws SQLException {
-        return this.connection.prepareStatement(sql).executeQuery();
+    public ResultSet executeQuery(String sql, Object... values) throws SQLException {
+        PreparedStatement stm = this.connection.prepareStatement(sql);
+
+        for (int i = 0; i < values.length; i++) {
+            stm.setObject(i, values[i]);
+        }
+
+        return stm.executeQuery();
     }
 
-    public void executeUpdate(String sql) throws SQLException {
-        this.connection.prepareStatement(sql).executeUpdate();
+    public void executeUpdate(String sql, Object... values) throws SQLException {
+        PreparedStatement stm = this.connection.prepareStatement(sql);
+
+        for (int i = 0; i < values.length; i++) {
+            stm.setObject(i, values[i]);
+        }
+
+        stm.executeUpdate();
     }
 
-    public boolean update(String field, String value, String where) {
+    public boolean update(String where, String query, Object... values) {
         try {
-            connection.prepareStatement(
-                    String.format("UPDATE %s SET %s=%s WHERE %s", table, field, value, where)
-            ).executeUpdate();
+            PreparedStatement stm = connection.prepareStatement(
+                    String.format("UPDATE %s SET %s WHERE %s", table, query, where)
+            );
+
+            for (int i = 0; i < values.length; i++) {
+                stm.setObject(i, values[i]);
+            }
+
+            stm.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -42,11 +57,17 @@ public class Crud {
         return false;
     }
 
-    public boolean create(String values) {
+    public boolean create(String query, Object... values) {
         try {
-            connection.prepareStatement(
-                    String.format("INSERT INTO %s VALUES (%s)", table, values)
-            ).executeUpdate();
+            PreparedStatement stm = connection.prepareStatement(
+                    String.format("INSERT INTO %s VALUES (%s)", table, query)
+            );
+
+            for (int i = 0; i < values.length; i++) {
+                stm.setObject(i, values[i]);
+            }
+
+            stm.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
