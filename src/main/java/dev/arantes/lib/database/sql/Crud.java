@@ -1,6 +1,8 @@
 package dev.arantes.lib.database.sql;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Crud {
     private Connection connection;
@@ -10,79 +12,60 @@ public class Crud {
         this.connection = connection;
         this.table = table;
     }
+
     public void createTable(String format) throws SQLException {
         PreparedStatement stm = connection.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS " + table + " (" + format + ")"
+                String.format("CREATE TABLE IF NOT EXISTS %s (%s)", table, format)
         );
         stm.execute();
-        stm.close();
     }
 
-    public ResultSet executeQuery(String sql, Object... values) throws SQLException {
-        PreparedStatement stm = this.connection.prepareStatement(sql);
+    public QueryResponse executeQuery(String sql, Object... values) throws SQLException {
+        PreparedStatement stm = connection.prepareStatement(sql);
 
         for (int i = 0; i < values.length; i++) {
-            stm.setObject(i, values[i]);
+            stm.setObject(i +1, values[i]);
         }
 
-        return stm.executeQuery();
+        return new QueryResponse(stm, stm.executeQuery());
     }
 
-    public void executeUpdate(String sql, Object... values) throws SQLException {
-        PreparedStatement stm = this.connection.prepareStatement(sql);
+    public boolean executeUpdate(String sql, Object... values) {
+        PreparedStatement stm = null;
 
-        for (int i = 0; i < values.length; i++) {
-            stm.setObject(i, values[i]);
+        try {
+            stm = connection.prepareStatement(sql);
+
+            for (int i = 0; i < values.length; i++) {
+                stm.setObject(i +1, values[i]);
+            }
+
+            stm.executeUpdate();
+            return true;
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (stm != null) {
+                    stm.close();
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
         }
 
-        stm.executeUpdate();
+        return false;
     }
 
     public boolean update(String where, String query, Object... values) {
-        try {
-            PreparedStatement stm = connection.prepareStatement(
-                    String.format("UPDATE %s SET %s WHERE %s", table, query, where)
-            );
-
-            for (int i = 0; i < values.length; i++) {
-                stm.setObject(i, values[i]);
-            }
-
-            stm.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        return executeUpdate(String.format("UPDATE %s SET %s WHERE %s", table, query, where), values);
     }
 
     public boolean create(String query, Object... values) {
-        try {
-            PreparedStatement stm = connection.prepareStatement(
-                    String.format("INSERT INTO %s VALUES (%s)", table, query)
-            );
-
-            for (int i = 0; i < values.length; i++) {
-                stm.setObject(i, values[i]);
-            }
-
-            stm.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        return executeUpdate(String.format("INSERT INTO %s VALUES (%s)", table, query), values);
     }
 
-    public ResultSet get(String field, String where) {
-        try {
-            return executeQuery(String.format("SELECT %s FROM %s WHERE %s", field, table, where));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    public QueryResponse get(String field, String where) throws SQLException {
+        return executeQuery(String.format("SELECT %s FROM %s WHERE %s", field, table, where));
     }
 }
