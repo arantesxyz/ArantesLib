@@ -21,41 +21,42 @@ public class YamlConfig {
         this.logger = plugin.getLogger();
         this.filename = filename;
 
-        this.init(null);
-    }
+        this.init(false);
 
-    public YamlConfig(String filename, JavaPlugin plugin, File defaultResource) {
+}
+    public YamlConfig(String filename, JavaPlugin plugin, boolean saveDefault) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
         this.filename = filename;
 
-        this.init(defaultResource);
+        this.init(saveDefault);
     }
 
-    private void init(File defaultResource){
+    private void init(boolean saveDefault){
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdir();
         }
 
         file = new File(plugin.getDataFolder(), filename);
 
+        if (saveDefault) {
+            logger.info("Trying to save file from resources.");
+            plugin.saveResource(filename, false);
+        }
+
         if (!file.exists()) {
             try {
                 file.getParentFile().mkdirs();
 
-                if (defaultResource != null && defaultResource.exists()){
-                    FileUtils.copyFile(defaultResource, file);
-                    logger.info(filename + " was copied from default resource.");
-                }else {
-                    file.createNewFile();
-                    logger.info(filename + " was created.");
-                }
+                file.createNewFile();
+                logger.info(filename + " was created.");
             } catch (IOException e) {
                 logger.warning("Couldn't create file " + filename);
             }
         }
 
         fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        logger.info(filename + " loaded!");
     }
 
     public FileConfiguration getConfig() {
