@@ -20,8 +20,8 @@ public class LanguageLoader {
         messages = new HashMap<>();
     }
 
-    public void load(final String filename, final File defaultFile) {
-        YamlConfig messageFile = new YamlConfig(path + filename, plugin, defaultFile);
+    public void load(final String filename) {
+        YamlConfig messageFile = new YamlConfig(path + filename, plugin, true);
 
         messageFile.getConfig().getKeys(false).forEach(path ->
                 messages.put(path.toLowerCase(), messageFile.getConfig().getString(path)));
